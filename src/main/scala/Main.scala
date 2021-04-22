@@ -2,6 +2,7 @@ import cats.effect._
 import cats.syntax.all._
 import com.typesafe.scalalogging.Logger
 import http.Server
+import petstore.domain._
 
 object Main extends IOApp {
   def run(args: List[String]): IO[ExitCode] = {
