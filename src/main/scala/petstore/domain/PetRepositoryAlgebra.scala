@@ -7,9 +7,9 @@ trait PetRepositoryAlgebra[F[_]] {
 
   def setupTables: F[Completion]
 
-  def create(pet: Pet): F[Pet]
+  def create(pet: Pet): F[Unit]
 
-  def update(pet: Pet): F[Option[Pet]]
+  def update(pet: Pet): F[Unit]
 
   def get(id: PetId): F[Option[Pet]]
 
