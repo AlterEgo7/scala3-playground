@@ -7,26 +7,20 @@ opaque type PetName = String
 object PetName:
   def apply(name: String): PetName = name
 
-  given petNameEncoder(using stringEncoder: Encoder[String]): Encoder[PetName] with {
-    final def apply(name: PetName): Json = stringEncoder(name)
-  }
+  given Encoder[PetName] = summon[Encoder[PetName]]
 
 opaque type PetBio = String
 object PetBio:
   def apply(bio: String): PetBio = bio
 
-  given petBioEncoder(using stringEncoder: Encoder[String]): Encoder[PetBio] with {
-    final def apply(bio: PetBio): Json = stringEncoder(bio)
-  }
+  given Encoder[PetBio] = summon[Encoder[PetBio]]
 
 opaque type PetId = UUID
 object PetId:
   def apply(uuid: UUID): PetId = uuid
   def generate(): PetId = UUID.randomUUID()
 
-  given petIdEncoder(using uuidEncoder: Encoder[UUID]): Encoder[PetId] with {
-    final def apply(id: PetId): Json = uuidEncoder(id)
-  }
+  given Encoder[PetId] = summon[Encoder[PetId]]
 
 final case class Pet (
   name: PetName,

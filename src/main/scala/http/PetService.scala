@@ -24,7 +24,7 @@ class PetService[F[_]: Async] extends Http4sDsl[F] {
 
     case GET -> Root / "pets" =>
       val pet = Pet(PetName("Lulu"), PetCategory.Dog, PetBio("The nicest dog"), PetStatus.Adopted, None)
-      Ok(pet)
+      Ok(List(pet))
   }
 }
 
