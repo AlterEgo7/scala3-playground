@@ -17,11 +17,13 @@ import cats.effect.std.Console
 import java.util.UUID
 
 class PostgresPetRepository[F[_]: Async](s: Session[F]) extends PetRepositoryAlgebra[F] {
-  val create: Command[Pet]               =
+  val create: Command[Pet] =
     sql"""
         INSERT INTO pets (name, category, bio, status, id) VALUES ($varchar, $varchar, $varchar, $varchar, $uuid)
       """.command
-      .contramap { case Pet(name, category, bio, status, id) => name.name ~ category.toString ~ bio.bio ~ status.toString ~ id.getOrElse[PetId](PetId.generate()).value }
+      .contramap { case Pet(name, category, bio, status, id) =>
+        name.name ~ category.toString ~ bio.bio ~ status.toString ~ id.getOrElse[PetId](PetId.generate()).value
+      }
 
   val createPrepaparedStatement          = s.prepare(create)
   override def create(pet: Pet): F[Unit] =
@@ -33,7 +35,19 @@ class PostgresPetRepository[F[_]: Async](s: Session[F]) extends PetRepositoryAlg
 
   override def delete(id: PetId): F[Option[Pet]] = ???
 
-  override def list: Stream[F, Pet] = ???
+  override def list: F[List[Pet]] = {
+    val list =
+      sql"""
+        SELECT id, name, category, bio, status FROM pets
+      """
+        .query(uuid ~ varchar ~ varchar ~ varchar ~ varchar)
+        .map { case id ~ name ~ category ~ bio ~ status =>
+          Pet(PetName(name), PetCategory.valueOf(category), PetBio(bio), PetStatus.valueOf(status), Some(PetId(id)))
+        }
+
+    s.execute(list)
+
+  }
 
   override def setupTables: F[Completion] = {
     val setup: Command[Void] = sql"""

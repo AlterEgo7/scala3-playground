@@ -15,5 +15,5 @@ trait PetRepositoryAlgebra[F[_]] {
 
   def delete(id: PetId): F[Option[Pet]]
 
-  def list: Stream[F, Pet]
+  def list: F[List[Pet]]
 }

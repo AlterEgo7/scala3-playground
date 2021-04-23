@@ -25,8 +25,8 @@ class PetService[F[_]: Async](petRepository: PetRepositoryAlgebra[F]) extends Ht
       Ok("Hello World")
 
     case GET -> Root / "pets" =>
-      val pet = Pet(PetName("Lulu"), PetCategory.Dog, PetBio("The nicest dog"), PetStatus.Adopted)
-      Ok(List(pet))
+//      val pet = Pet(PetName("Lulu"), PetCategory.Dog, PetBio("The nicest dog"), PetStatus.Adopted)
+      Ok(petRepository.list)
 
     case req @ POST -> Root / "pets" =>
       for {
