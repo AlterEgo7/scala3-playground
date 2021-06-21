@@ -4,7 +4,7 @@ import cats.effect._
 import cats.Monad
 import org.http4s.syntax.all._
 import org.http4s.server._
-import org.http4s.server.blaze.BlazeServerBuilder
+import org.http4s.blaze.server.BlazeServerBuilder
 import org.http4s.server.middleware.Logger
 import fs2._
 import petstore.domain.PetRepositoryAlgebra
